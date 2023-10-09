@@ -9,7 +9,7 @@ import logging
 
 template = jinja2.Template('''function get_design_probes(ground_height = -1, signal_height_dz = -0.5, power_height_dz = -1) = [
     {% for line in lines -%}
-    [{{line.x}}, {{line.y}}, ground_height + power_height_dz],
+    [{{line.x}}, {{line.y}}, ground_height + power_height_dz],  //  {{line["net"]}} {{line["ref des"]}}
     {% endfor -%}
 ];
 ''')

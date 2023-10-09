@@ -1,6 +1,6 @@
 '''
-kicad_parts_placer
-Command line tool which sets the position of components from a spreadsheet
+kicad_testpoints
+Command line tool which exports the position of pads from a PCB to create a test point document
 '''
 
 
@@ -32,15 +32,16 @@ Output needs to be
 
 
 @click.command(help="Takes a PCB & configuration data in mm, sets rotation and location on a new pcb")
-@click.option("--pcb", type=str, required=True, help="PCB file to edit")
-@click.option("--config", type=str, required=True, help="Spreadsheet configuration file")
+@click.option("--pcb", type=str, required=True, help="Source PCB file")
 @click.option("--points", type=str, required=True, help="Spreadsheet configuration file")
 @click.option("--out", type=str, required=False, help="Output spreadsheet")
-@click.option("--inplace", "-i", is_flag=True, help="Edit pcb file in place")
+@click.option("--center-x", "-x", type=float, default=0, help="")
+@click.option("--center-y", "-y", type=float, default=0, help="")
 #@click.option("--center-on-board", is_flag=True, help="Center group on board bounding box")
-#@click.option("--mirror", is_flag=True, help="Mirror parts, required for matching up the front and back of two boards")
+@click.option("--mirror", is_flag=True, help="Mirror parts, required for matching up the front and back of two boards")
+@click.option("--inplace", is_flag=True, help="Edit probe spreadsheet inplace")
 @click.option("--debug", is_flag=True, help="")
-def main(pcb, config, points, out, inplace, debug):
+def main(pcb, points, out, center_x, center_y, mirror, inplace, debug):
     scale = SCALE
     logging.basicConfig()
     logging.getLogger().setLevel(logging.INFO)
@@ -70,6 +71,8 @@ def main(pcb, config, points, out, inplace, debug):
     for i, row in points_df.iterrows():
         ref_des = row["source ref des"]
         module = board.FindFootprintByReference(ref_des)
+        if not module:
+            raise UserWarning("Ref Des %s not found", ref_des)
         for pad in module.Pads():
             if (pad.GetName() == row["pad name"]) or (int(pad.GetNumber()) == row["pad number"]):
                 points_df.loc[i, "pad"] = pad
@@ -79,10 +82,14 @@ def main(pcb, config, points, out, inplace, debug):
     for f in ['x', 'y', 'rotation','smt', 'side','net']:
         data[f] = []
 
+    x_mult = -1 if mirror else 1
+
     for _, row in points_df.iterrows():
         pad = row['pad']
-        data['x'].append(pad.GetCenter()[0]/SCALE)
-        data['y'].append(pad.GetCenter()[1]/SCALE)
+        x = (pad.GetCenter()[0]/SCALE - center_x)*x_mult
+        y = pad.GetCenter()[1]/SCALE - center_y
+        data['x'].append(round(x,4))
+        data['y'].append(round(y,4))
         data['rotation'].append(pad.GetOrientationDegrees())
         data['smt'].append(not pad.HasHole())
         data['side'].append("TOP" if pad.GetLayer() == 0 else "BOTTOM")
