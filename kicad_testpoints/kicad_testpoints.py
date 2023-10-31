@@ -23,7 +23,7 @@ def calc_probe_distance(name, probes_df):
     return distances
 
 
-def get_pad_locations(points_df, board):
+def get_pad_locations(points_df, board, mirror=False, center_x=False, center_y=False):
     '''
     Source format:
     + source ref des
@@ -50,6 +50,7 @@ def get_pad_locations(points_df, board):
     '''
     #GetCenter GetName GetOrientation GetPosition GetSize HasHole GetNumber GetParentAsString
     points_df["pad"] = [None]*len(points_df)
+    points_df["part value"] = [board.FindFootprintByReference(ref_des).GetValue() for ref_des in points_df["source ref des"]]
     for i, row in points_df.iterrows():
         ref_des = row["source ref des"]
         module = board.FindFootprintByReference(ref_des)
@@ -89,3 +90,4 @@ def get_pad_locations(points_df, board):
     distances_df['test point ref des'] = distances_df.index
 
     points_df=points_df.merge(distances_df, on=['test point ref des'])
+    return points_df
