@@ -1,38 +1,55 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
+
+"""The setup script."""
+
 from setuptools import setup, find_packages
 
-requirements = []
-with open("requirements.txt", 'r') as f:
-    for line in f:
-        requirements.append(line)
+with open('README.md') as readme_file:
+    readme = readme_file.read()
 
-description = ""
-with open("README.md", 'r') as f:
-    description = f.read()
+with open('HISTORY.rst') as history_file:
+    history = history_file.read()
 
-setup(name='kicad-testpoints',
-      version='0.1.0',
-      long_description=description,
-      long_description_content_type="text/markdown",
-      url='https://github.com/snhobbs/kicad-testpoints.git',
-      author='Simon Hobbs',
-      author_email='simon.hobbs@electrooptical.net',
-      license='MIT',
-      packages=find_packages(),
-      classifiers=[
-          "Programming Language :: Python :: 3",
-          "License :: OSI Approved :: MIT License",
-          "Operating System :: OS Independent",
-      ],
-      python_requires='>=3.6',
-      install_requires=requirements,
-      test_suite='nose.collector',
-      tests_require=['nose'],
-      entry_points={
-        "console_scripts": [
-            "kicad-testpoints=kicad_testpoints:main",
-            "dataframe-to-openscad=dataframe_to_openscad:main",
+requirements = [
+    'Click>=7.0',
+    'numpy',
+    'pandas',
+    'spreadsheet_wrangler>=0.1.3'
+]
+
+test_requirements = [ ]
+
+setup(
+    author="Simon Hobbs",
+    author_email='simon.hobbs@electrooptical.net',
+    python_requires='>=3.6',
+    classifiers=[
+        'Development Status :: 2 - Pre-Alpha',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+        'Natural Language :: English',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+    ],
+    description="Python Boilerplate contains all the boilerplate you need to create a Python package.",
+    entry_points={
+        'console_scripts': [
+            'kicad_testpoints=kicad_testpoints.cli:main',
+            'dataframe-to-openscad=kicad_testpoints.cli:dataframe-to-openscad',
         ],
-      },
-      include_package_data=False,
-      zip_safe=True)
+    },
+    install_requires=requirements,
+    license="GNU General Public License v3",
+    long_description=readme + '\n\n' + history,
+    include_package_data=True,
+    keywords='kicad_testpoints',
+    name='kicad_testpoints',
+    packages=find_packages(include=['kicad_testpoints', 'kicad_testpoints.*']),
+    test_suite='tests',
+    tests_require=test_requirements,
+    url='https://github.com/snhobbs/kicad-testpoints',
+    version='0.1.0',
+    zip_safe=False,
+)
