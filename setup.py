@@ -37,7 +37,7 @@ setup(
     entry_points={
         'console_scripts': [
             'kicad_testpoints=kicad_testpoints.cli:main',
-            'dataframe-to-openscad=kicad_testpoints.cli:dataframe-to-openscad',
+            'dataframe-to-openscad=kicad_testpoints.cli:dataframe_to_openscad',
         ],
     },
     install_requires=requirements,
