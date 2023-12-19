@@ -2,14 +2,15 @@
 kicad_testpoints
 Command line tool which exports the position of pads from a PCB to create a test point document
 '''
-import pcbnew
 import pandas
 import numpy as np
 
 
 # the internal coorinate space of pcbnew is 1E-6 mm. (a millionth of a mm)
 # the coordinate 121550000 corresponds to 121.550000
-SCALE = 1/1e-6
+def get_scale():
+    return 1/1e-6
+
 
 def calc_probe_distance(name, probes_df):
     '''
@@ -37,7 +38,6 @@ def get_pad_locations(points_df, board, mirror=False, center_x=False, center_y=F
     + leave 'ref des' unallocated to allow the user to set the ref des for use with kicad-parts-placer
     '''
 
-    scale = SCALE
     bounding_box = board.GetBoardEdgesBoundingBox()
 
     points_df["pad number"] = np.array(points_df["pad number"], dtype=int)
@@ -69,8 +69,8 @@ def get_pad_locations(points_df, board, mirror=False, center_x=False, center_y=F
 
     for _, row in points_df.iterrows():
         pad = row['pad']
-        x = (pad.GetCenter()[0]/SCALE - center_x)*x_mult
-        y = pad.GetCenter()[1]/SCALE - center_y
+        x = (pad.GetCenter()[0]/get_scale() - center_x)*x_mult
+        y = pad.GetCenter()[1]/get_scale() - center_y
         data['x'].append(round(x,4))
         data['y'].append(round(y,4))
         data['rotation'].append(pad.GetOrientationDegrees())

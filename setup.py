@@ -33,7 +33,7 @@ setup(
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
-    description="Python Boilerplate contains all the boilerplate you need to create a Python package.",
+    description="Extract pad positions from a kicad PCBNEW file with net data.",
     entry_points={
         'console_scripts': [
             'kicad_testpoints=kicad_testpoints.cli:main',

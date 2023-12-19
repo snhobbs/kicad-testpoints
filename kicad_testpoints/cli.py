@@ -1,5 +1,6 @@
 """Console script for kicad_testpoints."""
 import sys
+import os
 import click
 import jinja2
 import pandas
@@ -31,7 +32,7 @@ def data_frame_to_openscad(points, out, debug):
         logging.getLogger().setLevel(logging.DEBUG)
 
     if not out:
-        out = ".".join(points.split('.')[:-1])+".scad"
+        out = points.splitext[0]) + ".scad"
     points_df = pandas.read_excel(points)
     lines = [line for _, line in points_df.iterrows()]
     string = template.render(lines=lines)
