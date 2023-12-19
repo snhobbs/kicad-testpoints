@@ -32,7 +32,7 @@ def data_frame_to_openscad(points, out, debug):
         logging.getLogger().setLevel(logging.DEBUG)
 
     if not out:
-        out = points.splitext[0]) + ".scad"
+        out = points.splitext[0] + ".scad"
     points_df = pandas.read_excel(points)
     lines = [line for _, line in points_df.iterrows()]
     string = template.render(lines=lines)
@@ -45,8 +45,8 @@ def data_frame_to_openscad(points, out, debug):
 @click.option("--pcb", type=str, required=True, help="Source PCB file")
 @click.option("--points", type=str, required=True, help="Spreadsheet configuration file")
 @click.option("--out", type=str, required=False, help="Output spreadsheet")
-@click.option("--center-x", "-x", type=float, default=0, help="")
-@click.option("--center-y", "-y", type=float, default=0, help="")
+@click.option("--center-x", "-x", type=float, default=0, help="Reference point x")
+@click.option("--center-y", "-y", type=float, default=0, help="Reference point y")
 #  @click.option("--center-on-board", is_flag=True, help="Center group on board bounding box")
 @click.option("--mirror", is_flag=True, help="Mirror parts, required for matching up the front and back of two boards")
 @click.option("--inplace", is_flag=True, help="Edit probe spreadsheet inplace")
@@ -67,6 +67,13 @@ def main(pcb, points, out, center_x, center_y, mirror, inplace, debug):
     board = pcbnew.LoadBoard(pcb)
     points_df = spreadsheet_wrangler.read_file_to_df(points)
     df_filled = kicad_testpoints.get_pad_locations(points_df, board)
+    df_filled["x"] -= center_x
+    df_filled["y"] -= center_y
+
+    if mirror:
+        # Reflect over the y axis
+        df_filled["x"] *= -1
+
     df_filled.to_excel(out)
 
 

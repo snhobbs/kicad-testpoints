@@ -38,7 +38,7 @@ def get_pad_locations(points_df, board, mirror=False, center_x=False, center_y=F
     + leave 'ref des' unallocated to allow the user to set the ref des for use with kicad-parts-placer
     '''
 
-    bounding_box = board.GetBoardEdgesBoundingBox()
+    # bounding_box = board.GetBoardEdgesBoundingBox()
 
     points_df["pad number"] = np.array(points_df["pad number"], dtype=int)
     print(points_df)
@@ -81,13 +81,13 @@ def get_pad_locations(points_df, board, mirror=False, center_x=False, center_y=F
     points_df=points_df.drop(columns=["pad"])
     points_df = points_df.join(pandas.DataFrame(data))
 
-    distances = dict()
-    for name in points_df['test point ref des']:
-        distances[name] = calc_probe_distance(name, points_df)
+    # distances = dict()
+    # for name in points_df['test point ref des']:
+    #    distances[name] = calc_probe_distance(name, points_df)
 
-    distances_df = pandas.DataFrame(distances)
-    print(distances_df)
-    distances_df['test point ref des'] = distances_df.index
+    # distances_df = pandas.DataFrame(distances)
+    # print(distances_df)
+    # distances_df['test point ref des'] = distances_df.index
 
-    points_df=points_df.merge(distances_df, on=['test point ref des'])
+    # points_df=points_df.merge(distances_df, on=['test point ref des'])
     return points_df
