@@ -29,7 +29,6 @@ def get_pad_locations(points_df, board, mirror=False, center_x=False, center_y=F
     Source format:
     + source ref des
     + pad number
-    + pad name
 
     Output needs to be
     + x,y in mm
@@ -56,10 +55,18 @@ def get_pad_locations(points_df, board, mirror=False, center_x=False, center_y=F
         module = board.FindFootprintByReference(ref_des)
         if not module:
             raise UserWarning("Ref Des %s not found", ref_des)
+
+        found = False
         for pad in module.Pads():
-            if (pad.GetName() == row["pad name"]) or (str(pad.GetNumber()) == str(row["pad number"])):
+            if (str(pad.GetNumber()) == str(row["pad number"])):
+                # (pad.GetName() == row["pad name"]) or
                 points_df.loc[i, "pad"] = pad
+                found = True
                 break
+        if found is False:
+            nums = [str(pad.GetNumber()) for pad in module.Pads()]
+            raise UserWarning(f"Pad {row['pad number']} not found in module {ref_des} ({nums})")
+
 
     data = dict()
     for f in ['x', 'y', 'rotation','smt', 'side','net']:
@@ -69,6 +76,8 @@ def get_pad_locations(points_df, board, mirror=False, center_x=False, center_y=F
 
     for _, row in points_df.iterrows():
         pad = row['pad']
+        if pad is None:
+            raise UserWarning(f"Pad or part not found, {row}")
         x = (pad.GetCenter()[0]/get_scale() - center_x)*x_mult
         y = pad.GetCenter()[1]/get_scale() - center_y
         data['x'].append(round(x,4))
