@@ -50,6 +50,7 @@ def get_pad_locations(points_df, board, mirror=False, center_x=False, center_y=F
     #GetCenter GetName GetOrientation GetPosition GetSize HasHole GetNumber GetParentAsString
     points_df["pad"] = [None]*len(points_df)
     points_df["part value"] = [board.FindFootprintByReference(ref_des).GetValue() for ref_des in points_df["source ref des"]]
+    points_df["side"] = ["TOP" if board.FindFootprintByReference(ref_des).GetLayer() == 0 else "BOTTOM" for ref_des in points_df["source ref des"]]
     for i, row in points_df.iterrows():
         ref_des = row["source ref des"]
         module = board.FindFootprintByReference(ref_des)
@@ -69,7 +70,7 @@ def get_pad_locations(points_df, board, mirror=False, center_x=False, center_y=F
 
 
     data = dict()
-    for f in ['x', 'y', 'rotation','smt', 'side','net']:
+    for f in ['x', 'y', 'rotation','smt','net']:
         data[f] = []
 
     x_mult = -1 if mirror else 1
@@ -84,7 +85,6 @@ def get_pad_locations(points_df, board, mirror=False, center_x=False, center_y=F
         data['y'].append(round(y,4))
         data['rotation'].append(pad.GetOrientationDegrees())
         data['smt'].append(not pad.HasHole())
-        data['side'].append("TOP" if pad.GetLayer() == 0 else "BOTTOM")
         data['net'].append(pad.GetShortNetname())
 
     points_df=points_df.drop(columns=["pad"])
