@@ -24,7 +24,7 @@ def calc_probe_distance(name, probes_df):
     return distances
 
 
-def get_pad_locations(points_df, board, mirror=False, center_x=False, center_y=False):
+def get_pad_locations(points_df, board, mirror=False, center_x=0, center_y=0):
     '''
     Source format:
     + source ref des
@@ -40,7 +40,6 @@ def get_pad_locations(points_df, board, mirror=False, center_x=False, center_y=F
     # bounding_box = board.GetBoardEdgesBoundingBox()
 
     points_df["pad number"] = np.array(points_df["pad number"], dtype=int)
-    print(points_df)
     '''
     cycle through parts
     get matching ref des
@@ -49,8 +48,14 @@ def get_pad_locations(points_df, board, mirror=False, center_x=False, center_y=F
     '''
     #GetCenter GetName GetOrientation GetPosition GetSize HasHole GetNumber GetParentAsString
     points_df["pad"] = [None]*len(points_df)
-    points_df["part value"] = [board.FindFootprintByReference(ref_des).GetValue() for ref_des in points_df["source ref des"]]
-    points_df["side"] = ["TOP" if board.FindFootprintByReference(ref_des).GetLayer() == 0 else "BOTTOM" for ref_des in points_df["source ref des"]]
+    modules = []
+    for ref_des in points_df["source ref des"]:
+        module=board.FindFootprintByReference(ref_des)
+        if module is None:
+            raise UserWarning(f"Ref Des {ref_des} not found")
+        modules.append(module)
+    points_df["part value"] = [module.GetValue() for module in modules]
+    points_df["side"] = ["TOP" if module.GetLayer() == 0 else "BOTTOM" for module in modules]
     for i, row in points_df.iterrows():
         ref_des = row["source ref des"]
         module = board.FindFootprintByReference(ref_des)
@@ -79,10 +84,10 @@ def get_pad_locations(points_df, board, mirror=False, center_x=False, center_y=F
         pad = row['pad']
         if pad is None:
             raise UserWarning(f"Pad or part not found, {row}")
-        x = (pad.GetCenter()[0]/get_scale() - center_x)*x_mult
-        y = pad.GetCenter()[1]/get_scale() - center_y
-        data['x'].append(round(x,4))
-        data['y'].append(round(y,4))
+        x = (pad.GetCenter()[0] - center_x*get_scale())*x_mult
+        y = (pad.GetCenter()[1] - center_y*get_scale())
+        data['x'].append(round(x/get_scale(),4))
+        data['y'].append(round(y/get_scale(),4))
         data['rotation'].append(pad.GetOrientationDegrees())
         data['smt'].append(not pad.HasHole())
         data['net'].append(pad.GetShortNetname())

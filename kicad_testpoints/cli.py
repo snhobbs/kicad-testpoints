@@ -55,8 +55,9 @@ def main(pcb, points, out, center_x, center_y, mirror, inplace, debug):
 
     logging.basicConfig()
     logging.getLogger().setLevel(logging.INFO)
+    log_ = logging.getLogger()
     if debug:
-        logging.getLogger().setLevel(logging.DEBUG)
+        log_.setLevel(logging.DEBUG)
 
     if inplace:
         out = points
@@ -66,14 +67,7 @@ def main(pcb, points, out, center_x, center_y, mirror, inplace, debug):
 
     board = pcbnew.LoadBoard(pcb)
     points_df = spreadsheet_wrangler.read_file_to_df(points)
-    df_filled = kicad_testpoints.get_pad_locations(points_df, board)
-    df_filled["x"] -= center_x
-    df_filled["y"] -= center_y
-
-    if mirror:
-        # Reflect over the y axis
-        df_filled["x"] *= -1
-
+    df_filled = kicad_testpoints.get_pad_locations(points_df, board, mirror=mirror, center_x=center_x, center_y=center_y)
     df_filled.to_excel(out)
 
 
