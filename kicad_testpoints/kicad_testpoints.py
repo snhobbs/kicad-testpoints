@@ -4,12 +4,8 @@ Command line tool which exports the position of pads from a PCB to create a test
 '''
 import pandas
 import numpy as np
-
-
-# the internal coorinate space of pcbnew is 1E-6 mm. (a millionth of a mm)
-# the coordinate 121550000 corresponds to 121.550000
-def get_scale():
-    return 1/1e-6
+import pcbnew
+import logging
 
 
 def calc_probe_distance(name, probes_df):
@@ -24,7 +20,7 @@ def calc_probe_distance(name, probes_df):
     return distances
 
 
-def get_pad_locations(points_df, board, mirror=False, center_x=0, center_y=0):
+def get_pad_locations(points_df, board, mirror=False, use_drill_center=False):
     '''
     Source format:
     + source ref des
@@ -80,14 +76,21 @@ def get_pad_locations(points_df, board, mirror=False, center_x=0, center_y=0):
 
     x_mult = -1 if mirror else 1
 
+    center = pcbnew.VECTOR2I_MM(0,0)
+    if use_drill_center:
+        design_settings = board.GetDesignSettings()
+        center = design_settings.GetAuxOrigin()
+
+    log_ = logging.getLogger()
+    log_.info("Center: %s", center)
     for _, row in points_df.iterrows():
         pad = row['pad']
         if pad is None:
             raise UserWarning(f"Pad or part not found, {row}")
-        x = (pad.GetCenter()[0] - center_x*get_scale())*x_mult
-        y = (pad.GetCenter()[1] - center_y*get_scale())
-        data['x'].append(round(x/get_scale(),4))
-        data['y'].append(round(y/get_scale(),4))
+        x = (pad.GetCenter()[0] - center.x)*x_mult
+        y = (pad.GetCenter()[1] - center.y)
+        data['x'].append(round(pcbnew.ToMM(x),4))
+        data['y'].append(round(pcbnew.ToMM(y),4))
         data['rotation'].append(pad.GetOrientationDegrees())
         data['smt'].append(not pad.HasHole())
         data['net'].append(pad.GetShortNetname())
