@@ -6,11 +6,7 @@
 
 ## Basic Goals
 + Call out a list of pads and vias for use as test points
-+ Output in a format that is consistant with [kicad-parts-placer](https://github.com/snhobbs/kicad-parts-placer).
-
-## Related Projects
-+ [ Altium Designer ](https://www.altium.com/documentation/altium-designer/adding-testpoints-pcb)
-
++ Output in a format that is consistent with [kicad-parts-placer](https://github.com/snhobbs/kicad-parts-placer).
 
 
 + Describe the via or pad to add a test point to
@@ -27,7 +23,14 @@
     + Probe type
     + Offset
     + Vertical position relative to ground pins
-+ Vias need to be a seperate flow
++ Vias need to be a separate flow
     + net
     + class
     + x, y roughly (auto chooses the closest point)
+
+
+## Test Points in other EDA Programs
++ [ Altium Designer ](https://www.altium.com/documentation/altium-designer/adding-testpoints-pcb)
++ [Cadence](https://resources.pcb.cadence.com/blog/2020-the-pcb-test-point-and-its-importance-to-circuit-board-manufacturing)
++ [PCB-Investigator](https://manual.pcb-investigator.com/pages/test_point_report)
++ [PADS](https://blogs.sw.siemens.com/electronic-systems-design/2020/04/21/test-point-placement-enhancement-in-pads-professional-vx-2-7/)
