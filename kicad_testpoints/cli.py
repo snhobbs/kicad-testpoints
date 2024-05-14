@@ -46,10 +46,9 @@ def data_frame_to_openscad(points, out, debug):
 @click.option("--points", type=str, required=True, help="Spreadsheet configuration file")
 @click.option("--out", type=str, required=False, help="Output spreadsheet")
 @click.option("--drill-center", is_flag=True, help="Use drill/file center as reference coordinate")
-@click.option("--mirror", is_flag=True, help="Mirror parts, required for matching up the front and back of two boards")
 @click.option("--inplace", is_flag=True, help="Edit probe spreadsheet inplace")
 @click.option("--debug", is_flag=True, help="")
-def main(pcb, points, out, drill_center, mirror, inplace, debug):
+def main(pcb, points, out, drill_center, inplace, debug):
 
     logging.basicConfig()
     logging.getLogger().setLevel(logging.WARNING)
@@ -65,7 +64,7 @@ def main(pcb, points, out, drill_center, mirror, inplace, debug):
 
     board = pcbnew.LoadBoard(pcb)
     points_df = spreadsheet_wrangler.read_file_to_df(points)
-    df_filled = kicad_testpoints.get_pad_locations(points_df, board, mirror=mirror, use_drill_center=drill_center)
+    df_filled = kicad_testpoints.get_pad_locations(points_df, board, use_drill_center=drill_center)
 
     df_filled.to_excel(out)
 

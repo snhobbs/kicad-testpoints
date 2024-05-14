@@ -20,7 +20,7 @@ def calc_probe_distance(name, probes_df):
     return distances
 
 
-def get_pad_locations(points_df, board, mirror=False, use_drill_center=False):
+def get_pad_locations(points_df, board, use_drill_center=False):
     '''
     Source format:
     + source ref des
@@ -74,8 +74,6 @@ def get_pad_locations(points_df, board, mirror=False, use_drill_center=False):
     for f in ['x', 'y', 'rotation','smt','net']:
         data[f] = []
 
-    x_mult = -1 if mirror else 1
-
     center = pcbnew.VECTOR2I_MM(0,0)
     if use_drill_center:
         design_settings = board.GetDesignSettings()
@@ -87,7 +85,7 @@ def get_pad_locations(points_df, board, mirror=False, use_drill_center=False):
         pad = row['pad']
         if pad is None:
             raise UserWarning(f"Pad or part not found, {row}")
-        x = (pad.GetCenter()[0] - center.x)*x_mult
+        x = (pad.GetCenter()[0] - center.x)
         y = (pad.GetCenter()[1] - center.y)
         data['x'].append(round(pcbnew.ToMM(x),4))
         data['y'].append(round(pcbnew.ToMM(y),4))
