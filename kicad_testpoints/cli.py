@@ -1,6 +1,6 @@
 """Console script for kicad_testpoints."""
+
 import sys
-import os
 import click
 import jinja2
 import pandas
@@ -10,22 +10,26 @@ import pcbnew
 from . import kicad_testpoints
 
 
-template = jinja2.Template('''function get_design_probes(ground_height = -1, signal_height_dz = -0.5, power_height_dz = -1) = [
+template = jinja2.Template("""function get_design_probes(ground_height = -1, signal_height_dz = -0.5, power_height_dz = -1) = [
     {% for line in lines -%}
     [{{line.x}}, {{line.y}}, ground_height + power_height_dz],  //  {{line["net"]}} {{line["ref des"]}}
     {% endfor -%}
 ];
-''')
+""")
 
 
-@click.command(help="Takes a PCB & configuration data in mm, sets rotation and location on a new pcb")
-@click.option("--points", type=str, required=True, help="Spreadsheet configuration file")
+@click.command(
+    help="Takes a PCB & configuration data in mm, sets rotation and location on a new pcb"
+)
+@click.option(
+    "--points", type=str, required=True, help="Spreadsheet configuration file"
+)
 @click.option("--out", type=str, required=False, help="Output openscad file name")
 @click.option("--debug", is_flag=True, help="")
 def data_frame_to_openscad(points, out, debug):
-    '''
+    """
     Generate pin and probe list from a configuration
-    '''
+    """
     logging.basicConfig()
     logging.getLogger().setLevel(logging.INFO)
     if debug:
@@ -37,19 +41,24 @@ def data_frame_to_openscad(points, out, debug):
     lines = [line for _, line in points_df.iterrows()]
     string = template.render(lines=lines)
 
-    with open(out, 'w') as f:
+    with open(out, "w") as f:
         f.write(string)
 
 
-@click.command(help="Takes a PCB & configuration data in mm, sets rotation and location on a new pcb")
+@click.command(
+    help="Takes a PCB & configuration data in mm, sets rotation and location on a new pcb"
+)
 @click.option("--pcb", type=str, required=True, help="Source PCB file")
-@click.option("--points", type=str, required=True, help="Spreadsheet configuration file")
+@click.option(
+    "--points", type=str, required=True, help="Spreadsheet configuration file"
+)
 @click.option("--out", type=str, required=False, help="Output spreadsheet")
-@click.option("--drill-center", is_flag=True, help="Use drill/file center as reference coordinate")
+@click.option(
+    "--drill-center", is_flag=True, help="Use drill/file center as reference coordinate"
+)
 @click.option("--inplace", is_flag=True, help="Edit probe spreadsheet inplace")
 @click.option("--debug", is_flag=True, help="")
 def main(pcb, points, out, drill_center, inplace, debug):
-
     logging.basicConfig()
     logging.getLogger().setLevel(logging.WARNING)
     log_ = logging.getLogger()
@@ -60,11 +69,15 @@ def main(pcb, points, out, drill_center, inplace, debug):
         out = points
     else:
         if out is None:
-            raise ValueError("Either the inplace flag needs to be set or the --out option set")
+            raise ValueError(
+                "Either the inplace flag needs to be set or the --out option set"
+            )
 
     board = pcbnew.LoadBoard(pcb)
     points_df = spreadsheet_wrangler.read_file_to_df(points)
-    df_filled = kicad_testpoints.get_pad_locations(points_df, board, use_drill_center=drill_center)
+    df_filled = kicad_testpoints.get_pad_locations(
+        points_df, board, use_drill_center=drill_center
+    )
 
     df_filled.to_excel(out)
 

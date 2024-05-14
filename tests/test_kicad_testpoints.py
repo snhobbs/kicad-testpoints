@@ -2,11 +2,9 @@
 
 """Tests for `kicad_testpoints` package."""
 
-
 import unittest
 from click.testing import CliRunner
 
-from kicad_testpoints import kicad_testpoints
 from kicad_testpoints import cli
 
 
@@ -27,7 +25,7 @@ class TestKicad_testpoints(unittest.TestCase):
         runner = CliRunner()
         result = runner.invoke(cli.main)
         assert result.exit_code == 0
-        assert 'kicad_testpoints.cli.main' in result.output
-        help_result = runner.invoke(cli.main, ['--help'])
+        assert "kicad_testpoints.cli.main" in result.output
+        help_result = runner.invoke(cli.main, ["--help"])
         assert help_result.exit_code == 0
-        assert '--help  Show this message and exit.' in help_result.output
+        assert "--help  Show this message and exit." in help_result.output

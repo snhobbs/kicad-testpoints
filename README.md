@@ -9,7 +9,7 @@
 + Output in a format that is consistant with [kicad-parts-placer](https://github.com/snhobbs/kicad-parts-placer).
 
 ## Related Projects
-+ [ Altium Designer ](https://www.altium.com/documentation/altium-designer/adding-testpoints-pcb) 
++ [ Altium Designer ](https://www.altium.com/documentation/altium-designer/adding-testpoints-pcb)
 
 
 
@@ -31,4 +31,3 @@
     + net
     + class
     + x, y roughly (auto chooses the closest point)
-
