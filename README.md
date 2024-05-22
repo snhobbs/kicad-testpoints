@@ -34,3 +34,5 @@
 + [Cadence](https://resources.pcb.cadence.com/blog/2020-the-pcb-test-point-and-its-importance-to-circuit-board-manufacturing)
 + [PCB-Investigator](https://manual.pcb-investigator.com/pages/test_point_report)
 + [PADS](https://blogs.sw.siemens.com/electronic-systems-design/2020/04/21/test-point-placement-enhancement-in-pads-professional-vx-2-7/)
+
+For more on generating test point reports see [this post](https://www.thejigsapp.com/docs/test-point-report/).
