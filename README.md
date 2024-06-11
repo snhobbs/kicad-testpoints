@@ -1,5 +1,9 @@
 # kicad-testpoints
 
+## KiCAD Plugin
+This is the command line tool based on reference designator and pad number. 
+For the action plugin see [snhobbs/kicad-testpoints-pcm](github.com/snhobbs/kicad-testpoints-pcm)
+
 ## Project Scope
 + Simplify the process of building a test & programming jig for a KiCAD design.
 + Export centroid like data for individual pads
