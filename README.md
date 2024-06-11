@@ -2,7 +2,7 @@
 
 ## KiCAD Plugin
 This is the command line tool based on reference designator and pad number. 
-For the action plugin see [snhobbs/kicad-testpoints-pcm](github.com/snhobbs/kicad-testpoints-pcm)
+For the action plugin see [snhobbs/kicad-testpoints-pcm](https://github.com/snhobbs/kicad-testpoints-pcm). 
 
 ## Project Scope
 + Simplify the process of building a test & programming jig for a KiCAD design.
