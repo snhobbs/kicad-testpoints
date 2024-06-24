@@ -25,6 +25,7 @@ _log = None
 )
 @click.option("--inplace", is_flag=True, help="Edit probe spreadsheet inplace")
 @click.option("--debug", is_flag=True, help="")
+@click.version_option()
 def main(pcb, points, out, drill_center, inplace, debug):
     global _log
     _log = logging.getLogger()
