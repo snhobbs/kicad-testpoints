@@ -8,6 +8,7 @@ For the action plugin see [snhobbs/kicad-testpoints-pcm](https://github.com/snho
 
 The plugin is generates the same report as the CLI except it can be used entirely within the KiCAD user interface (no terminals required) and uses the fabrication property of the pads instead of their pad number and ref des.
 
+### Watch the plugin introduction
 [![Watch the video](https://img.youtube.com/vi/Z7aEWe4d0jE/hqdefault.jpg)](https://www.youtube.com/embed/Z7aEWe4d0jE)
 
 ## Use
