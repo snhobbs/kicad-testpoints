@@ -1,6 +1,6 @@
 # kicad-testpoints
 
-CLI to generate a [JigsApp](https://www.thejigspp.com) compatible test point report for generating bed-of-nails jigs. Specify any pad as a test pad.
+CLI to generate a [JigsApp](https://www.thejigsapp.com) compatible test point report for generating bed-of-nails jigs. Specify any pad as a test pad.
 
 ## KiCAD Plugin
 This is the command line tool based on reference designator and pad number.
