@@ -1,6 +1,6 @@
 [project]
 name="kicad_testpoints"
-version="0.2.0"
+version="0.3.0"
 #dynamic = ["dependencies"]
 authors=[
     {name="Simon Hobbs", email='simon.hobbs@electrooptical.net'}]
