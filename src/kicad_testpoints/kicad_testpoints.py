@@ -12,15 +12,19 @@ import pcbnew
 _log = logging.getLogger("kicad_testpoints")
 
 
-def calc_probe_distance(name, probes_df):
+def calc_probe_distance(a, b):
+    dist = [a["x"] - b["x"], a["y"] - b["y"]]
+    return (dist[0] ** 2 + dist[1] ** 2) ** 0.5
+
+
+def calc_probe_distances(name, probes_df):
     """
     Calculate distance to all probes to this one. Return dict of distances.
     """
     distances = {}
     probe = probes_df[probes_df["test point ref des"] == name].iloc[0]
     for _, line in probes_df.iterrows():
-        dist = [line["x"] - probe["x"], line["y"] - probe["y"]]
-        distances[line["test point ref des"]] = (dist[0] ** 2 + dist[1] ** 2) ** 0.5
+        distances[line["test point ref des"]] = calc_probe_distance(probe, line)
     return distances
 
 
