@@ -3,8 +3,8 @@
 import pathlib
 import unittest
 
-import kicad_testpoints
 import pcbnew
+from kicad_testpoints import kicad_testpoints  # noqa
 
 data_dir = pathlib.Path(__file__).parent / "data"
 
