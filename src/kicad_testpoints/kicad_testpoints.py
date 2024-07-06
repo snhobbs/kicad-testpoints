@@ -102,6 +102,14 @@ def write_csv(data: list[dict], filename: Path):
 def build_test_point_report(
     board: pcbnew.BOARD, settings: Settings, pads: tuple[pcbnew.PAD]
 ) -> list[dict]:
+    if settings.use_aux_origin:
+        ds = board.GetDesignSettings()
+        aux_origin = ds.GetAuxOrigin()
+        if aux_origin is None:
+            # Keep origin as 0,0
+            _log.info("No aux origin returned. Using 0,0 as origin")
+            settings.use_aux_origin = False
+
     if pads:
         assert isinstance(pads[0], pcbnew.PAD)
     return [
@@ -134,4 +142,17 @@ def get_pads(
             msg = f"Pad {pad_number} not found in module {ref_des} ({nums})"
             raise UserWarning(msg)
 
+    return pads
+
+
+def get_pads_by_property(board: pcbnew.BOARD) -> tuple[pcbnew.PAD]:
+    """
+    Get list of matching pads from a list of (ref_des, pad_num)
+    """
+    test_point_property = 4
+    pads = []
+    for p in board.GetPads():
+        if p.GetProperty() != test_point_property:
+            continue
+        pads.append(p)
     return pads
