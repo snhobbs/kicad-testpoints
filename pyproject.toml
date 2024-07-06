@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name="kicad_testpoints"
 version="0.3.0"
@@ -29,7 +33,7 @@ dependencies = [
 
 [project.license]
 file="LICENSE"
-license="GNU General Public License v3"
+test="GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1"
 
 [project.scripts]
 kicad_testpoints='kicad_testpoints.cli:main'

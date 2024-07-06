@@ -53,10 +53,7 @@ lint/flake8: ## check style with flake8
 lint: lint/flake8 ## check style
 
 test: ## run tests quickly with the default Python
-	python setup.py test
-
-test-all: ## run tests on every Python version with tox
-	tox
+	pytest
 
 coverage: ## check code coverage quickly with the default Python
 	coverage run --source kicad_testpoints setup.py test

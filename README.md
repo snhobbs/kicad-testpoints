@@ -12,8 +12,25 @@ The plugin is generates the same report as the CLI except it can be used entirel
 [![Watch the video](https://img.youtube.com/vi/Z7aEWe4d0jE/hqdefault.jpg)](https://www.youtube.com/embed/Z7aEWe4d0jE)
 
 ## Use
-Any pad can be set as a test point.
-Add the target pads to the spreadsheet input with the "source ref des" and the "pad number".
+There are two modes of the CLI:
+
++ by-fab-setting
++ from-spreadsheet
+
+
+### By Fab Setting
+If using the fab setting then you set the fabrication setting of each desired pad to "test point". Run the CLI with the following arguments to generate a spreadsheet report:
+
+```sh
+kicad_testpoints by-fab-setting --pcb <PROJECT>.kicad_pcb  --out test-point-report.xlsx --drill-center
+```
+
+### From Spreadsheet
+If using a spreadsheet input instead then generate one with the source ref des and source pad then call the CLI like this:
+
+```sh
+kicad_testpoints from-spreadsheet --pcb <PROJECT>.kicad_pcb  --points test_points.xlsx --out test-point-report.xlsx --drill-center
+```
 
 The CLI will pull out the related pad data and creates the report as a csv.
 
@@ -24,7 +41,7 @@ The generated report is consistent with the [kicad-parts-placer](https://github.
 ## Links
 + [Blog Post](https://www.thejigsapp.com/blog/2024/06/03/kicad-testpoints-plugin/)
 + [Video Introduction](https://www.youtube.com/watch?v=Z7aEWe4d0jE)
-+ [TheJigsApp: Test Point Resports](https://www.thejigsapp.com/docs/test-point-report/).
++ [TheJigsApp: Test Point Reports](https://www.thejigsapp.com/docs/test-point-report/).
 
 ## Test Points in other EDA Programs
 + [ Altium Designer ](https://www.altium.com/documentation/altium-designer/adding-testpoints-pcb)
