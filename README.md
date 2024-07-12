@@ -34,6 +34,9 @@ kicad_testpoints from-spreadsheet --pcb <PROJECT>.kicad_pcb  --points test_point
 
 The CLI will pull out the related pad data and creates the report as a csv.
 
+NOTE: As it is possible to create footprints with multiple pads with the same name this method will take the first matching
+pad name.
+
 ![Test Point Report CSV](test-point-report.png)
 
 The generated report is consistent with the [kicad-parts-placer](https://github.com/snhobbs/kicad-parts-placer) CLI tool.
