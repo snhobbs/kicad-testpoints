@@ -44,7 +44,7 @@ def from_spreadsheet(pcb, points, out, drill_center, inplace):
     points_df = file_io.read_file_to_df(points)
     pads = kicad_testpoints.get_pads(
         (
-            (line["source ref des"], int(line["source pad"]))
+            (line["source ref des"], (line["source pad"]))
             for _, line in points_df.iterrows()
         ),
         board,

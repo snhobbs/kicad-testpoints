@@ -11,7 +11,6 @@ import pcbnew
 
 _log = logging.getLogger("kicad_testpoints")
 
-
 def calc_probe_distance(a, b):
     dist = [a["x"] - b["x"], a["y"] - b["y"]]
     return (dist[0] ** 2 + dist[1] ** 2) ** 0.5
@@ -76,13 +75,21 @@ def get_pad_position(p: pcbnew.PAD, settings: Settings) -> tuple[float, float]:
     return [round(pt, 4) for pt in position]
 
 
+def get_net_name(p: pcbnew.PAD, **kwargs):
+    """
+    Get the identifier for connecting pads. Uses the short name which can cause conflicts.
+    """
+    net = p.GetShortNetname()
+    return net
+
+
 # Table of fields and how to get them
 _fields = {
     "source ref des": (
         lambda p, **kwargs: p.GetParentFootprint().GetReferenceAsString()
     ),
     "source pad": (lambda p, **kwargs: p.GetNumber()),
-    "net": (lambda p, **kwargs: p.GetShortNetname()),
+    "net": get_net_name,
     "net class": (lambda p, **kwargs: p.GetNetClassName()),
     "side": get_pad_side,
     "x": (lambda p, **kwargs: get_pad_position(p, **kwargs)[0]),
@@ -97,7 +104,7 @@ _fields = {
 def write_csv(data: list[dict], filename: Path):
     fieldnames = data[0].keys()
     with filename.open("w", newline="") as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter=',', quotechar='"', quoting=csv.QUOTE_NONNUMERIC)
         if fieldnames is not None:
             writer.writeheader()
         writer.writerows(data)
