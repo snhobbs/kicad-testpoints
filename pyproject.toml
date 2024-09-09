@@ -8,18 +8,16 @@ version="0.3.0"
 #dynamic = ["dependencies"]
 authors=[
     {name="Simon Hobbs", email='simon.hobbs@electrooptical.net'}]
-requires-python='>=3.8'
+requires-python='>=3.9'
 classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
 ]
 description="Extract pad positions from a kicad PCBNEW file with net data."
 keywords=['kicad_testpoints', 'kicad', 'python', 'eda', 'electronics', 'pcb', 'manufacturing']
@@ -68,7 +66,7 @@ omit = ["*/migrations/*", "*/tests/*"]
 
 # ==== mypy ====
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.12"
 check_untyped_defs = true
 ignore_missing_imports = true
 warn_unused_ignores = true
@@ -211,3 +209,19 @@ line-ending = "auto"
 
 [tool.ruff.lint.isort]
 force-single-line = true
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pylint.TYPECHECK]
+signature-mutators = [
+    "click.decorators.option",
+    "click.decorators.argument",
+    "click.decorators.version_option",
+    "click.decorators.help_option",
+    "click.decorators.pass_context",
+    "click.decorators.confirmation_option"
+]
+
+[tool.pylint.MESSAGESCONTROL]
+disable=["C0415"]

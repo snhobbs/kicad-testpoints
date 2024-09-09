@@ -54,3 +54,6 @@ class TestKicad_testpoints(unittest.TestCase):
         for position, expected in zip(positions, expectations, strict=False):
             self.assertAlmostEqual(position[0], expected[0])
             self.assertAlmostEqual(position[1], expected[1])
+
+if __name__ == "__main__":
+    unittest.main()
