@@ -79,7 +79,7 @@ def get_net_name(p: pcbnew.PAD, **kwargs):
     """
     Get the identifier for connecting pads. Uses the short name which can cause conflicts.
     """
-    net = p.GetShortNetname()
+    net = p.GetNetname()
     return net
 
 
