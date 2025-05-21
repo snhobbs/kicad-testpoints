@@ -7,7 +7,6 @@ import csv
 import logging
 from dataclasses import dataclass
 from pathlib import Path
-
 import pcbnew
 
 _log = logging.getLogger("kicad_testpoints")

@@ -1,12 +1,12 @@
 """Console script for kicad_testpoints."""
 
 import logging
+import sys
+from pathlib import Path
 
 import click
 import pandas as pd
 import pcbnew
-import sys
-from pathlib import Path
 
 from . import file_io
 from . import kicad_testpoints
@@ -18,6 +18,7 @@ _log = logging.getLogger("kicad_testpoints")
 @click.version_option()
 @click.group()
 def gr1(debug):
+    logging.basicConfig()
     _log.setLevel(logging.INFO)
     if debug:
         _log.setLevel(logging.DEBUG)
@@ -63,6 +64,12 @@ def from_spreadsheet(pcb, points, out, drill_center, inplace):
     report = kicad_testpoints.build_test_point_report(board, settings, pads)
     report_df = pd.DataFrame(report)
     # kicad_testpoints.write_csv(report, Path(out))
+
+    nets = set(board.GetNetsByName())
+    tp_nets = report_df["net"].unique()
+
+    _log.info("Coverage: %d / %d nets. Saved to: %s", len(tp_nets), len(nets), out)
+
     file_io.write(report_df, out)
     return sys.exit(0)
 
@@ -92,6 +99,12 @@ def by_fab_setting(pcb, out, drill_center):
 
     report = kicad_testpoints.build_test_point_report(board, settings, pads)
     report_df = pd.DataFrame(report)
+
+    nets = set(board.GetNetsByName())
+    tp_nets = report_df["net"].unique()
+
+    _log.info("Coverage: %d / %d nets. Saved to: %s", len(tp_nets), len(nets), out)
+
     file_io.write(report_df, out)
     return sys.exit(0)
 
