@@ -40,7 +40,7 @@ def get_pad_side(p: pcbnew.PAD, **kwargs):
     the correct side. As the top layer/side is 0 then we can do the following.
     """
     fp: pcbnew.FOOTPRINT = p.GetParentFootprint()
-    return "BOTTOM" if (fp.GetSide() - p.GetLayer()) else "TOP"
+    return "BOTTOM" if (fp.GetSide() != p.GetLayer()) else "TOP"
 
 
 def calc_pad_position(center: tuple[float, float], origin: tuple[float, float]):
