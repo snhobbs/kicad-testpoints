@@ -5,6 +5,8 @@ import logging
 import click
 import pandas as pd
 import pcbnew
+import sys
+from pathlib import Path
 
 from . import file_io
 from . import kicad_testpoints
@@ -19,6 +21,7 @@ def gr1(debug):
     _log.setLevel(logging.INFO)
     if debug:
         _log.setLevel(logging.DEBUG)
+    return 0
 
 
 @gr1.command(
@@ -38,9 +41,13 @@ def from_spreadsheet(pcb, points, out, drill_center, inplace):
         out = points
     elif out is None:
         msg = "Either the inplace flag needs to be set or the --out option set"
-        raise ValueError(msg)
+        _log.error(msg)
+        return sys.exit(1)
 
-    board = pcbnew.LoadBoard(pcb)
+    board_path = Path(pcb).absolute()
+    assert board_path.exists()
+    print(board_path)
+    board = pcbnew.LoadBoard(board_path.as_posix())
     points_df = file_io.read_file_to_df(points)
     pads = kicad_testpoints.get_pads(
         (
@@ -57,6 +64,7 @@ def from_spreadsheet(pcb, points, out, drill_center, inplace):
     report_df = pd.DataFrame(report)
     # kicad_testpoints.write_csv(report, Path(out))
     file_io.write(report_df, out)
+    return sys.exit(0)
 
 
 @gr1.command(
@@ -68,12 +76,15 @@ def from_spreadsheet(pcb, points, out, drill_center, inplace):
     "--drill-center", is_flag=True, help="Use drill/file center as reference coordinate"
 )
 def by_fab_setting(pcb, out, drill_center):
-    board = pcbnew.LoadBoard(pcb)
+    board_path = Path(pcb).absolute()
+    assert board_path.exists()
+    print(board_path)
+    board = pcbnew.LoadBoard(board_path.as_posix())
     pads = kicad_testpoints.get_pads_by_property(board)
 
     if len(pads) == 0:
         _log.warning("No pads with fabrication setting found")
-        return
+        return sys.exit(1)
 
     assert len(pads) > 0
     settings = kicad_testpoints.Settings()
@@ -82,10 +93,11 @@ def by_fab_setting(pcb, out, drill_center):
     report = kicad_testpoints.build_test_point_report(board, settings, pads)
     report_df = pd.DataFrame(report)
     file_io.write(report_df, out)
+    return sys.exit(0)
 
 
 def main():
-    gr1()
+    return gr1()
 
 
 if __name__ == "__main__":

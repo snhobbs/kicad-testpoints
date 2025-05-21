@@ -1,6 +1,19 @@
 # kicad-testpoints
 
+> **Easily generate production-grade test point reports from your KiCAD PCB files — no scripting or extra tools required.**
+
+## Features
+
+- ✅ Generate bed-of-nails test point reports from KiCAD `.kicad_pcb` files
+- ✅ CLI and GUI plugin available
+- ✅ Compatible with [TheJigsApp](https://www.thejigsapp.com) jig generation tools
+- ✅ Excel/CSV output for manufacturing
+- ✅ Two workflows: from KiCAD fab properties or external spreadsheet
+
+
 CLI to generate a [JigsApp](https://www.thejigsapp.com) compatible test point report for generating bed-of-nails jigs. Specify any pad as a test pad.
+
+Want GUI integration? Check out the [KiCAD Action Plugin →](https://github.com/snhobbs/kicad-testpoints-pcm)
 
 ## KiCAD Plugin
 This is the command line tool based on reference designator and pad number.
@@ -11,7 +24,7 @@ The plugin is generates the same report as the CLI except it can be used entirel
 ### Watch the plugin introduction
 [![Watch the video](https://img.youtube.com/vi/Z7aEWe4d0jE/hqdefault.jpg)](https://www.youtube.com/embed/Z7aEWe4d0jE)
 
-## Use
+## How to Use
 There are two modes of the CLI:
 
 + by-fab-setting
@@ -40,6 +53,15 @@ pad name.
 ![Test Point Report CSV](test-point-report.png)
 
 The generated report is consistent with the [kicad-parts-placer](https://github.com/snhobbs/kicad-parts-placer) CLI tool.
+
+## Installation
+
+### From Source
+```sh
+git clone https://github.com/snhobbs/kicad-testpoints.git
+cd kicad-testpoints
+pip install -e .
+```
 
 ## Links
 + [Blog Post](https://www.thejigsapp.com/blog/2024/06/03/kicad-testpoints-plugin/)
